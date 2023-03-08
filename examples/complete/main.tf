@@ -8,7 +8,7 @@ module "vpc" {
 
   cidr_block = "172.16.0.0/16"
 
-  context = module.this.context
+  context = module.context.legacy
 }
 
 module "subnets" {
@@ -22,7 +22,7 @@ module "subnets" {
   nat_gateway_enabled  = false
   nat_instance_enabled = false
 
-  context = module.this.context
+  context = module.context.legacy
 }
 
 module "rds_instance" {
@@ -60,5 +60,5 @@ module "rds_instance" {
     }
   ]
 
-  context = module.this.context
+  context = module.context.self
 }
