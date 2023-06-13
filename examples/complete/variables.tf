@@ -1,7 +1,7 @@
-variable "region" {
-  type        = string
-  description = "AWS region"
-}
+#variable "region" {
+#  type        = string
+#  description = "AWS region"
+#}
 
 variable "availability_zones" {
   type = list(string)
@@ -107,4 +107,9 @@ variable "publicly_accessible" {
 variable "apply_immediately" {
   type        = bool
   description = "Specifies whether any database modifications are applied immediately, or during the next maintenance window"
+}
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "VPC CIDR block"
 }
