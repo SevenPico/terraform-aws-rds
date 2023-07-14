@@ -25,6 +25,12 @@ locals {
 }
 
 resource "aws_db_instance" "default" {
+  #checkov:skip=CKV_AWS_353:skipping 'Ensure that RDS instances have performance insights enabled' because it can be enabled through 'var.performance_insights_enabled'.
+  #checkov:skip=CKV_AWS_354:skipping 'Ensure RDS Performance Insights are encrypted using KMS CMKs' because it can be configured through 'var.performance_insights_kms_key_id'.
+  #checkov:skip=CKV_AWS_133:skipping 'Ensure that RDS instances has backup policy' because it can be configured through 'var.backup_retention_period'
+  #checkov:skip=CKV_AWS_118:skipping 'Ensure that enhanced monitoring is enabled for Amazon RDS instances' because it can be configured through 'var.monitoring_interval'
+  #checkov:skip=CKV_AWS_129:skipping 'Ensure that respective logs of Amazon Relational Database Service (Amazon RDS) are enabled' because it can be enabled through 'var.enabled_cloudwatch_logs_exports'
+  #checkov:skip=CKV_AWS_293:skipping 'Ensure that AWS database instances have deletion protection enabled' because it can be enabled through 'var.deletion_protection'
   count = module.context.enabled ? 1 : 0
 
   identifier            = module.context.id
