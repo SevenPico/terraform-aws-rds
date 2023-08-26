@@ -133,8 +133,7 @@ resource "aws_db_parameter_group" "default" {
 }
 
 resource "aws_db_option_group" "default" {
-#  count = length(var.option_group_name) == 0 && (module.context.enabled || var.delete_option_group == false) ? 1 : 0
-  count = 1
+  count = length(var.option_group_name) == 0 && (module.context.enabled || var.delete_option_group == false) ? 1 : 0
 
   #This ensures that the name_prefix will always start with a letter and meet the AWS naming constraints.
   name_prefix          = local.name_prefix
