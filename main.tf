@@ -125,7 +125,7 @@ resource "aws_db_parameter_group" "default" {
 }
 
 resource "aws_db_option_group" "default" {
-  count = length(var.option_group_name) == 0 && module.context.enabled || var.delete_option_group ? 1 : 0
+  count = length(var.option_group_name) == 0 && (module.context.enabled || var.delete_option_group) ? 1 : 0
 
   name_prefix          = "${module.context.id}${module.context.delimiter}"
   engine_name          = var.engine
