@@ -212,7 +212,7 @@ module "dns_host_name" {
   source  = "cloudposse/route53-cluster-hostname/aws"
   version = "0.12.2"
 
-  enabled  = module.context.enabled
+  enabled  = module.context.enabled && var.delete_option_group == true
   dns_name = var.host_name
   zone_id  = var.dns_zone_id
   records  = coalescelist(aws_db_instance.default.*.address, [""])
