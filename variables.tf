@@ -351,3 +351,8 @@ variable "timeouts" {
     delete = "60m"
   }
 }
+
+variable "delete_option_group" {
+  type    = bool
+  default = true
+}
