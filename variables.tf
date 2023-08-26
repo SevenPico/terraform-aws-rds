@@ -353,6 +353,8 @@ variable "timeouts" {
 }
 
 variable "delete_option_group" {
-  type    = bool
-  default = true
+  type        = bool
+  description = "Flag to ensure if you want to delete the option group or not."
+  default     = false
+
 }
