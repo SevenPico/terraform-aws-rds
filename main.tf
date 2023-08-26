@@ -22,6 +22,14 @@ locals {
   )
 
   availability_zone = var.multi_az ? null : var.availability_zone
+
+  #block to compute a valid name_prefix. In this approach, if the module.context.id doesn't start with a letter,
+  #it will use the string "default" as the prefix.
+  #Then, in your aws_db_option_group, replace the direct usage of ${module.context.id}${module.context.delimiter} with the local name_prefix.
+
+  is_valid_id_prefix = length(module.context.id) > 0 && can(regex("[a-zA-Z]", substr(module.context.id, 0, 1)))
+  valid_id_prefix    = local.is_valid_id_prefix ? module.context.id : "default"
+  name_prefix        = "${local.valid_id_prefix}${module.context.delimiter}"
 }
 
 resource "aws_db_instance" "default" {
@@ -127,7 +135,8 @@ resource "aws_db_parameter_group" "default" {
 resource "aws_db_option_group" "default" {
   count = length(var.option_group_name) == 0 && (module.context.enabled || var.delete_option_group == false) ? 1 : 0
 
-  name_prefix          = "${module.context.id}${module.context.delimiter}"
+  #This ensures that the name_prefix will always start with a letter and meet the AWS naming constraints.
+  name_prefix          = local.name_prefix
   engine_name          = var.engine
   major_engine_version = local.major_engine_version
   tags                 = module.context.tags
