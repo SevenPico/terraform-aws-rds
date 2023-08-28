@@ -27,9 +27,9 @@ locals {
   #it will use the string "default" as the prefix.
   #Then, in your aws_db_option_group, replace the direct usage of ${module.context.id}${module.context.delimiter} with the local name_prefix.
 
-  is_valid_id_prefix = length(module.context.id) > 0 && can(regex("[a-zA-Z]", substr(module.context.id, 0, 1)))
-  valid_id_prefix    = local.is_valid_id_prefix ? module.context.id : "default"
-  name_prefix        = "${local.valid_id_prefix}${module.context.delimiter}"
+  is_valid_id_prefix = length(var.option_group_name_prefix) > 0 && can(regex("[a-zA-Z]", substr(var.option_group_name_prefix, 0, 1)))
+  valid_id_prefix    = local.is_valid_id_prefix ? var.option_group_name_prefix : "default"
+  name_prefix        = local.valid_id_prefix
 }
 
 resource "aws_db_instance" "default" {
