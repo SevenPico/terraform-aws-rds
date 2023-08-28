@@ -136,7 +136,7 @@ resource "aws_db_option_group" "default" {
   count = (module.context.enabled && length(var.option_group_name) == 0) || (!module.context.enabled && !var.delete_option_group && length(var.option_group_name) == 0) ? 1 : 0
 
   #This ensures that the name_prefix will always start with a letter and meet the AWS naming constraints.
-  name_prefix          = "default" #local.name_prefix
+  name_prefix          = local.name_prefix
   engine_name          = var.engine
   major_engine_version = local.major_engine_version
   tags                 = module.context.tags
