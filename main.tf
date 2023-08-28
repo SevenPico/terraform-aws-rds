@@ -33,7 +33,7 @@ locals {
 }
 
 resource "aws_db_instance" "default" {
-  count = module.context.enabled && var.delete_option_group == true ? 1 : 0
+  count = module.context.enabled ? 1 : 0
 
   identifier            = module.context.id
   db_name               = var.database_name
