@@ -358,3 +358,9 @@ variable "delete_option_group" {
   default     = false
 
 }
+
+variable "option_group_name_prefix" {
+  type        =  string
+  description =  "Option group name prefix"
+  default     =  "default"
+}
