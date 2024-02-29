@@ -47,3 +47,8 @@ output "resource_id" {
   value       = join("", aws_db_instance.default.*.resource_id)
   description = "The RDS Resource ID of this instance."
 }
+
+output "allocated_storage" {
+  value       = join("", aws_db_instance.default.*.allocated_storage)
+  description = "The RDS Resource ID of this instance."
+}
