@@ -351,3 +351,16 @@ variable "timeouts" {
     delete = "60m"
   }
 }
+
+variable "delete_option_group" {
+  type        = bool
+  description = "Flag to ensure if you want to delete the option group or not."
+  default     = false
+
+}
+
+variable "option_group_name_prefix" {
+  type        =  string
+  description =  "Option group name prefix"
+  default     =  "default"
+}

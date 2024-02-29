@@ -22,6 +22,14 @@ locals {
   )
 
   availability_zone = var.multi_az ? null : var.availability_zone
+
+  #block to compute a valid name_prefix. In this approach, if the module.context.id doesn't start with a letter,
+  #it will use the string "default" as the prefix.
+  #Then, in your aws_db_option_group, replace the direct usage of ${module.context.id}${module.context.delimiter} with the local name_prefix.
+
+  is_valid_id_prefix = length(var.option_group_name_prefix) > 0 && can(regex("[a-zA-Z]", substr(var.option_group_name_prefix, 0, 1)))
+  valid_id_prefix    = local.is_valid_id_prefix ? var.option_group_name_prefix : "default"
+  name_prefix        = local.valid_id_prefix
 }
 
 resource "aws_db_instance" "default" {
@@ -131,9 +139,10 @@ resource "aws_db_parameter_group" "default" {
 }
 
 resource "aws_db_option_group" "default" {
-  count = length(var.option_group_name) == 0 && module.context.enabled ? 1 : 0
+  count = (module.context.enabled && length(var.option_group_name) == 0) || (var.delete_option_group == false && length(var.option_group_name) == 0) ? 1 : 0
 
-  name_prefix          = "${module.context.id}${module.context.delimiter}"
+  #This ensures that the name_prefix will always start with a letter and meet the AWS naming constraints.
+  name_prefix          = local.name_prefix
   engine_name          = var.engine
   major_engine_version = local.major_engine_version
   tags                 = module.context.tags
@@ -218,7 +227,7 @@ module "dns_host_name" {
   source  = "cloudposse/route53-cluster-hostname/aws"
   version = "0.12.2"
 
-  enabled  = module.context.enabled
+  enabled  = module.context.enabled && var.delete_option_group == true
   dns_name = var.host_name
   zone_id  = var.dns_zone_id
   records  = coalescelist(aws_db_instance.default.*.address, [""])
